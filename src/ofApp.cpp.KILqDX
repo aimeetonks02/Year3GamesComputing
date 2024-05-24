@@ -1,0 +1,305 @@
+#include "ofApp.h"
+#include <ofAppBaseWindow.h>
+
+//--------------------------------------------------------------
+void ofApp::setup(){
+    font.load("RobotoMono-VariableFont_wght.ttf", 48);
+    smallFont.load("RobotoMono-VariableFont_wght.ttf", 28);
+    ofSetBackgroundColor(77, 55, 26);
+    player.hand.load("images/hand.png");
+    cheat.cheatTab.load("images/cheatTab.png");
+    cheat.sheet.load("images/cheatSheet.png");
+    dot.start();
+    dash.start();
+    reset.start();
+}
+
+//--------------------------------------------------------------
+void ofApp::update(){
+
+    player.updateObject();
+    button.updateObject();
+
+}
+
+//--------------------------------------------------------------
+void ofApp::draw(){
+
+    dot.draw(ofGetWidth()-800, ofGetHeight()/2, 1); //dot
+    dash.draw(ofGetWidth()-400, ofGetHeight()/2, 2); //dash
+    reset.draw(ofGetWidth()-600, ofGetHeight()-900, 3); //reset
+    ofSetColor(219, 218, 202);
+    page.drawObject(0,0);
+    ofSetColor(60);
+    font.drawString("Encrypt:", 400, 175);
+    font.drawString(page.setNote(),400,250);
+    font.drawString(page.getSymbols(),250,400);
+    ofSetColor(255);
+    smallFont.drawString("To select difficulty, press 1(Alphabet), 2(Easy), 3(Medium), or 4(Hard)",50,50);
+    cheat.drawObject(cheat.state);
+    player.drawObject(ofGetMouseX(), ofGetMouseY());
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+    if(key == 'q'){
+        OF_EXIT_APP(0);
+    }
+    else if (key == OF_KEY_TAB){
+        page.addSymbol(".");
+    }
+    else if (key == OF_KEY_RETURN){
+        page.addSymbol("-");
+    }
+    else if(key == OF_KEY_BACKSPACE){
+        page.clearPage();
+    }
+    else if (key == OF_KEY_UP){
+        cheat.state=2;
+        cheat.drawObject(2);
+    }
+    else if (key == OF_KEY_DOWN){
+        cheat.state=1;
+        cheat.drawObject(1);
+    }
+    else if (key == keys[32]){
+        page.generateNote();
+    }
+    else if (key == keys[49]){
+        page.difficulty = 1;
+        page.generateNote();
+    }
+    else if (key == keys[50]){
+        page.difficulty = 2;
+        page.generateNote();
+    }
+    else if (key == keys[51]){
+        page.difficulty = 3;
+        page.generateNote();
+    }
+    else if (key == keys[52]){
+        page.difficulty = 4;
+        page.generateNote();
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y ){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button){
+    //page.updateObject();
+
+    /*if(button == 0){
+        if (player.area == 1){
+            graphicButtons().draw(1425, 621, 2);
+            std::cout << "dot" << std::endl;
+        }
+        else if (player.area == 2){
+            graphicButtons().draw(1625, 621, 2);
+            std::cout << "dash" << std::endl;
+        }
+        else if (player.area == 3){
+            graphicButtons().draw(1525, 421, 2);
+            std::cout << "reset" << std::endl;
+        }
+    }*/
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseReleased(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseEntered(int x, int y){
+
+
+
+    /*if((x >= 1425 && x <= 1600) &&
+            (y >= 621 && y <= 621 + 175)){
+        player.area = 1; //dot
+    }
+
+    else if((x >= 1625 && x <= 1800) &&
+            (y >= 621 && y <= 621 + 175)){
+        player.area = 2; //dash
+    }
+    else if((x >= 1525 && x <= 1700) &&
+        (y >= 421 && y <= 421 + 175)){
+        player.area = 3; //reset
+    }
+    else{
+        player.area = 0;
+    }*/
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseExited(int x, int y){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::gotMessage(ofMessage msg){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::dragEvent(ofDragInfo dragInfo){
+
+}
+
+//------------------new game code-------------------------------
+
+GameObject::GameObject(){
+
+}
+
+GameObject::~GameObject(){
+
+}
+
+void GameObject::updateObject(){
+
+}
+
+void GameObject::drawObject(){
+
+}
+
+//-------------------player-----------------------------
+
+Player::Player(){
+
+}
+
+Player::~Player(){
+
+}
+
+void Player::drawObject(int x,int y){
+    hand.draw(x-150,y-150);
+}
+
+//-------------------buttons----------------------------
+
+Button::Button(){
+
+}
+
+Button::~Button(){
+
+}
+
+void Button::drawObject(int x, int y, int state){
+    if (state == 1){
+        //buttonReg.draw(x,y, 175, 175);
+
+    }
+    else if (state == 2){
+        //buttonPressed.draw(x,y, 175, 175);
+        //ofDrawCircle(x,y,200);
+        //Button().updateObject();
+    }
+}
+
+/*void Button::redrawObject(int state){
+    if (state == 1){
+        buttonReg.draw(x,y);
+    }
+    else if (state == 2){
+        buttonPressed.draw(0, 0);
+    }
+}*/
+
+//-------------------pages-----------------------------
+
+Page::Page(){
+
+}
+
+Page::~Page(){
+
+}
+
+void Page::drawObject(int x, int y){
+    ofDrawRectangle(200,100,700,ofGetHeight()-200);
+}
+
+void Page::clearPage(){
+    symbols.clear();
+}
+
+void Page::addSymbol(std::string symbol){
+    int checkLength = symbols.size()+1;
+    if (checkLength %6 == 0){
+        symbols.push_back("\n");
+        symbols.push_back(symbol);
+    }
+    else{
+        symbols.push_back(symbol);
+    }
+
+}
+
+std::string Page::getSymbols(){
+    string text = ofToString(symbols);
+    return text;
+    //find out why this isn't printing to the screen
+}
+
+string Page::setNote(){
+    return word;
+}
+
+void Page::generateNote(){
+    int alphaRandom = static_cast<int>(ofRandom(0,26));
+    int random = static_cast<int>(ofRandom(0,15));
+    if (difficulty == 1){
+        word = alphabet[1][alphaRandom];
+    }
+    else{
+        word = dictionary[difficulty][random];
+    }
+}
+
+//-------------------Cheat Sheet-----------------------
+
+cheatSheet::cheatSheet(){
+
+}
+
+cheatSheet::~cheatSheet(){
+
+}
+
+void cheatSheet::drawObject(int state){
+    if (state == 1){
+        cheatTab.draw(ofGetWidth()-800, ofGetHeight()-100);
+        //ofSetColor(219, 218, 202);
+        //ofDrawRectangle(ofGetWidth()-800, ofGetHeight()-50, 450,100);
+        //ofSetColor(255);
+    }
+    else if (state == 2){
+        sheet.draw(ofGetWidth()-900, ofGetHeight()-600);
+        //ofSetColor(255);
+        //ofDrawRectangle(100, 100, ofGetWidth()-200, ofGetHeight()-200);
+    }
+}
